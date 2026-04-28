@@ -5,8 +5,433 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>AdminLTE v4</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <style>
+    :root{
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(15, 23, 42, .10);
+      --shadow: 0 10px 25px rgba(15, 23, 42, .08);
+      --shadow-hover: 0 16px 38px rgba(15, 23, 42, .14);
+      --sidebar-bg: #0b1220;
+      --sidebar-surface: rgba(255,255,255,.06);
+      --sidebar-text: rgba(255,255,255,.86);
+      --sidebar-muted: rgba(255,255,255,.62);
+      --accent: #6366f1;
+      --accent-2: #22c55e;
+      --radius: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 700px at 100% 0%, rgba(99,102,241,.10), transparent 55%),
+                  radial-gradient(900px 520px at 0% 100%, rgba(34,197,94,.08), transparent 50%),
+                  var(--bg);
+    }
+
+    .app{
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    .sidebar{
+      background: linear-gradient(180deg, rgba(11,18,32,1) 0%, rgba(10,16,28,1) 100%);
+      color: var(--sidebar-text);
+      padding: 18px 14px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px 14px;
+      margin-bottom: 10px;
+    }
+    .brand__logo{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(99,102,241,1), rgba(34,197,94,1));
+      box-shadow: 0 8px 18px rgba(0,0,0,.25);
+      flex: 0 0 auto;
+    }
+    .brand__title{
+      font-weight: 700;
+      letter-spacing: .2px;
+      line-height: 1.15;
+    }
+    .brand__subtitle{
+      color: var(--sidebar-muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav{
+      margin-top: 8px;
+      padding: 0 6px;
+    }
+    .nav__section{
+      margin: 14px 0 8px;
+      padding: 0 8px;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .nav a{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      transition: background .15s ease, box-shadow .15s ease, transform .15s ease, color .15s ease;
+      outline: none;
+    }
+    .nav a .left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .nav a .icon{
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      flex: 0 0 auto;
+    }
+    .nav a .label{
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav a .badge{
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(99,102,241,.18);
+      border: 1px solid rgba(99,102,241,.35);
+      color: rgba(255,255,255,.90);
+      flex: 0 0 auto;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      transform: translateY(-1px);
+    }
+    .nav a:focus-visible{
+      box-shadow: 0 0 0 4px rgba(99,102,241,.30);
+    }
+    .nav a.is-active{
+      background: linear-gradient(135deg, rgba(99,102,241,.22), rgba(34,197,94,.12));
+      border: 1px solid rgba(99,102,241,.35);
+    }
+
+    .content{
+      padding: 22px 26px 34px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, .06);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .topbar h1{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: .2px;
+    }
+    .topbar .meta{
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .topbar .actions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex: 0 0 auto;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, .10);
+      border-color: rgba(99,102,241,.35);
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(99,102,241,1), rgba(79,70,229,1));
+      border-color: rgba(99,102,241,.50);
+      color: white;
+      box-shadow: 0 14px 28px rgba(99,102,241,.22);
+    }
+
+    .grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card{
+      grid-column: span 3;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) + 2px);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, .06);
+      padding: 14px 14px 12px;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(99,102,241,.26);
+    }
+    .card__head{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .card__label{
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .chip{
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(99,102,241,.25);
+      background: rgba(99,102,241,.10);
+      color: rgba(67,56,202,1);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .chip.good{
+      border-color: rgba(34,197,94,.30);
+      background: rgba(34,197,94,.12);
+      color: rgba(22,101,52,1);
+    }
+    .value{
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0;
+      color: var(--text);
+    }
+    .sub{
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(99,102,241,1);
+      box-shadow: 0 0 0 4px rgba(99,102,241,.14);
+      flex: 0 0 auto;
+    }
+    .dot.good{
+      background: rgba(34,197,94,1);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.14);
+    }
+
+    .panel{
+      grid-column: span 12;
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, .06);
+      padding: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      margin-top: 2px;
+    }
+    .panel__title{
+      margin: 0 0 10px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: .2px;
+    }
+    .panel__body{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px){
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 780px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+      .content{ padding: 16px; }
+      .card{ grid-column: span 12; }
+      .topbar{ flex-direction: column; align-items: flex-start; }
+      .topbar .actions{ width: 100%; }
+      .btn{ flex: 1; }
+    }
+  </style>
 </head>
 <body>
-  <script>window.location.href = './dist/index.html'</script>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true"></div>
+        <div>
+          <div class="brand__title">Admin Panel</div>
+          <div class="brand__subtitle">Overview & metrics</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <div class="nav__section">Menu</div>
+        <a class="is-active" href="#">
+          <span class="left">
+            <span class="icon" aria-hidden="true">🏠</span>
+            <span class="label">Dashboard</span>
+          </span>
+          <span class="badge">Live</span>
+        </a>
+        <a href="#">
+          <span class="left">
+            <span class="icon" aria-hidden="true">📦</span>
+            <span class="label">Orders</span>
+          </span>
+          <span class="badge">12</span>
+        </a>
+        <a href="#">
+          <span class="left">
+            <span class="icon" aria-hidden="true">👥</span>
+            <span class="label">Users</span>
+          </span>
+        </a>
+        <a href="#">
+          <span class="left">
+            <span class="icon" aria-hidden="true">⚙️</span>
+            <span class="label">Settings</span>
+          </span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <div class="meta">Modern theme: dark sidebar, light content</div>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button">Export</button>
+          <button class="btn primary" type="button">Create report</button>
+        </div>
+      </header>
+
+      <section class="grid" aria-label="Metrics">
+        <article class="card">
+          <div class="card__head">
+            <div class="card__label">Revenue</div>
+            <div class="chip good">+12%</div>
+          </div>
+          <p class="value">$48,920</p>
+          <div class="sub"><span class="dot good" aria-hidden="true"></span>vs last week</div>
+        </article>
+
+        <article class="card">
+          <div class="card__head">
+            <div class="card__label">Orders</div>
+            <div class="chip">+4%</div>
+          </div>
+          <p class="value">1,284</p>
+          <div class="sub"><span class="dot" aria-hidden="true"></span>processed today</div>
+        </article>
+
+        <article class="card">
+          <div class="card__head">
+            <div class="card__label">Users</div>
+            <div class="chip">+2%</div>
+          </div>
+          <p class="value">32,110</p>
+          <div class="sub"><span class="dot" aria-hidden="true"></span>active this month</div>
+        </article>
+
+        <article class="card">
+          <div class="card__head">
+            <div class="card__label">Errors</div>
+            <div class="chip" style="border-color: rgba(239,68,68,.30); background: rgba(239,68,68,.10); color: rgba(153,27,27,1);">-18%</div>
+          </div>
+          <p class="value">76</p>
+          <div class="sub"><span class="dot" aria-hidden="true" style="background: rgba(239,68,68,1); box-shadow: 0 0 0 4px rgba(239,68,68,.14);"></span>last 24 hours</div>
+        </article>
+
+        <section class="panel" aria-label="Notes">
+          <h2 class="panel__title">Notes</h2>
+          <div class="panel__body">
+            Hover over menu items and metric cards to see the new interactive states (lift + shadow + subtle highlight). The layout stays simple and responsive without any build tooling.
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Redirect is the default behavior (backward compatible).
+    // To view this standalone demo, open: index.html?standalone
+    const params = new URLSearchParams(window.location.search)
+    if (!params.has('standalone')) {
+      window.location.href = './dist/index.html'
+    }
+  </script>
 </body>
 </html>
